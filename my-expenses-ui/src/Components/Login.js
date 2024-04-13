@@ -3,14 +3,15 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { Eye, EyeSlashFill } from "react-bootstrap-icons";
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import SignupModal from './SignupModal';
+import { login } from '../Services/Users'
 
 class Login extends Component {
     
     state = {
         showSignUpModal: false,
         loginData: {
-            email: '',
-            password: '',
+            email: 'b@mail',
+            password: '1234',
         },
       };
     
@@ -25,12 +26,21 @@ class Login extends Component {
     
       handleInputChange = (e) => {
         const { name, value } = e.target;
+        console.log(name, value)
+        console.log(this.state)
         this.setState((prevState) => ({
             loginData: {
-            ...prevState.signUpData,
+            ...prevState.loginData,
             [name]: value,
           },
         }));
+      };
+
+      handleLogIn = async () => {
+        console.log(this.state.loginData)
+        // const response = await createUser({"name": "b","email": "b@mail"});
+        const response = await login(this.state.loginData);
+        console.log(response)
       };
     
 
@@ -43,17 +53,16 @@ class Login extends Component {
               <Card.Body>
                 <Card.Title>Login</Card.Title>
                 <Form className="ng-untouched ng-pristine ng-valid">
-                  <Form.Group controlId="formBasicUsername">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="email"
-                      value={this.state.username}
-                      onChange={this.handleInputChange}
-                      placeholder="Enter your email"
-                    />
-                  </Form.Group>
-
+                <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={this.state.loginData.email}
+                  onChange={this.handleInputChange}
+                />
+              </Form.Group>
                   <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <Form.Control
@@ -65,7 +74,7 @@ class Login extends Component {
                     />
                   </Form.Group>
                   <br/>
-                  <Button type='submit' className="w-100 btn btn-primary btn-block" onClick={this.handleLogin}>
+                  <Button className="w-100 btn btn-primary btn-block" onClick={this.handleLogIn}>
                             Log In
                         </Button>
                   <hr/>
