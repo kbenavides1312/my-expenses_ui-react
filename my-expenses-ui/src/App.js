@@ -1,5 +1,10 @@
+import dotenv from 'dotenv';
 import logo from './logo.svg';
 import './App.css';
+
+dotenv.config();
+console.log("REACT_APP_USERS_API_URL", process.env.REACT_APP_USERS_API_URL);
+
 
 function App() {
   return (

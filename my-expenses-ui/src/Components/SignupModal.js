@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Button, Modal, Form } from 'react-bootstrap';
+import { createUser } from '../Services/Users'
+
+const _ = require("lodash");
 
 class SignupModal extends Component {
   state = {
@@ -10,11 +13,20 @@ class SignupModal extends Component {
       password: '',
       confirmPassword: '',
     },
+    errors:{
+        name: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      }
   };
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
+    this.validateInput(e)
     this.setState((prevState) => ({
+      ...prevState,
       signUpData: {
         ...prevState.signUpData,
         [name]: value,
@@ -22,8 +34,48 @@ class SignupModal extends Component {
     }));
   };
 
-  handleSignUp = () => {
-    // Implement sign-up logic here, you can access the form data in this.state.signUpData
+  validateInput = e => {
+    let { name, value } = e.target;
+    let error=""
+    switch (name) {
+      case "name":
+        if (!value) {
+          error = "Please enter name.";
+        }
+        break;
+  
+      case "password":
+        if (!value) {
+          error = "Please enter Password.";
+        }
+        break;
+  
+      case "confirmPassword":
+        if (!value || value != this.state.signUpData.password) {
+          error = "Passwords do not match.";
+        }
+        break;
+  
+      default:
+        break;
+    }
+    this.setState((prevState) => ({
+      ...prevState,
+      errors: {
+        ...prevState.errors,
+        [name]: error,
+      },
+    }));
+  }
+
+  isSubmitDisabled = () => {
+    return (Object.values(this.state.errors).filter( err => err!=="").length > 0) || (Object.values(this.state.signUpData).filter( field => field==="").length > 0)
+  }
+
+  handleSignUp = async () => {
+    console.log(this.state.signUpData)
+    // const response = await createUser({"name": "b","email": "b@mail"});
+    const response = await createUser(_.omit(this.state.signUpData,'confirmPassword'));
   };
 
   render(props) {
@@ -89,6 +141,7 @@ class SignupModal extends Component {
                   value={this.state.signUpData.confirmPassword}
                   onChange={this.handleInputChange}
                 />
+                {this.state.errors.confirmPassword && <span className='err'>{this.state.errors.confirmPassword}</span>}
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -96,7 +149,10 @@ class SignupModal extends Component {
             <Button variant="secondary" onClick={this.props.handleCloseModal}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={this.handleSignUp}>
+            <Button variant="primary"
+              disabled={this.isSubmitDisabled()}
+              onClick={this.handleSignUp}
+            >
               Sign Up
             </Button>
           </Modal.Footer>
