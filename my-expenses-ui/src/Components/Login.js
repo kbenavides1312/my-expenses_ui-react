@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import InputGroup from "react-bootstrap/InputGroup";
-import { Eye, EyeSlashFill } from "react-bootstrap-icons";
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import SignupModal from './SignupModal';
 import { login } from '../Services/Users'
