@@ -5,10 +5,10 @@ import { getInventory } from '../Services/Inventory'
 
 function ResponsiveExample() {
     const responseMapping = {
-        "store_id": "Tienda",
-        "product_code": "Codigo",
-        "product_description": "Descripcion",
-        "stock_quantity": "Disponible",
+        "StoreId": "Tienda",
+        "Codigo": "Codigo",
+        "Detalle": "Descripcion",
+        "Cantidad": "Disponible",
     }
     const [inventory, setIntentory] = useState([])
 
