@@ -1,7 +1,7 @@
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import { useState, useEffect } from 'react'
-import { getInventory } from '../Services/Inventory'
+import { getInventory, deleteInventoryItem } from '../Services/Inventory'
 
 function ResponsiveExample() {
     const responseMapping = {
@@ -15,7 +15,14 @@ function ResponsiveExample() {
     useEffect(() => {
         getInventory().then((result) => setIntentory(result));
     }, []);
-    console.log("inv", inventory)
+
+    const deleteItem = (itemId, all) => () => {
+        console.log("clicked", itemId, all)
+        deleteInventoryItem(itemId, all).then(
+            () => getInventory().then((result) => setIntentory(result))
+        )
+    }
+    
     return (
         <Container>
             <br/>
@@ -27,6 +34,8 @@ function ResponsiveExample() {
                                 {Object.values(responseMapping).map( (header,index) => (
                                     <th key={index}>{header}</th>
                                 ) )}
+                                <th ></th>
+                                <th ></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,6 +44,20 @@ function ResponsiveExample() {
                                 { Object.keys(responseMapping).map( (key,columdIdx) => (
                                     <td key={`${rowIdx}_${columdIdx}`}> {item[key]} </td>
                                 ))}
+                                <td key={`${rowIdx}_reduce`}>
+                                    <Button 
+                                    variant='warning'
+                                    onClick={deleteItem(item["ProductId"])}>
+                                        Reduce
+                                    </Button>
+                                </td>
+                                <td key={`${rowIdx}_delete`}>
+                                    <Button 
+                                    variant='danger'
+                                    onClick={deleteItem(item["ProductId"], true)}>
+                                        Delete
+                                    </Button>
+                                </td>
                                 </tr>
                             ))}
                         </tbody>
