@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { uploadReceiptXML } from '../Services/Receipts'
+import { Button } from 'react-bootstrap';
 
 function FileUpload() {
     const [file, setFile] = useState(null);
@@ -28,10 +29,15 @@ function FileUpload() {
 
     return (
         <div>
+            <br/>
             <input type="file" onChange={handleChange} />
-            <button onClick={handleUpload} disabled={!file || uploading}>
+            <br/>
+            <br/>
+            <Button 
+            variant='primary'
+            onClick={handleUpload} disabled={!file || uploading}>
                 {uploading ? 'Uploading...' : 'Upload'}
-            </button>
+            </Button>
         </div>
     );
 }
