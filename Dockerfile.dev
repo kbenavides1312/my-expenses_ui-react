@@ -1,8 +1,18 @@
+# Dev version
+FROM node:18-alpine
 
-# development
-FROM node:21-alpine3.17
+# Set working directory
+WORKDIR /app
 
-WORKDIR /app/my-expenses-ui
+# Install dependencies
+COPY ./my-expenses-ui/package.json ./my-expenses-ui/package-lock.json ./
+RUN npm ci
 
-ENTRYPOINT ["tail"]
-CMD ["-f","/dev/null"]
+# Copy source (in dev you might prefer mounting instead of copying)
+COPY ./my-expenses-ui/ .
+
+# Expose React dev server port
+EXPOSE 3000
+
+# Start React app
+CMD ["npm", "start"]
